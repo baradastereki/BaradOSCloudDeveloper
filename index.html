@@ -3,373 +3,118 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Barad OS — Liquid Glass UI</title>
+<title>Barad OS</title>
+  <link rel="stylesheet" href="style.css" />
 <style>
-  /* Reset & base */
+  /* Base Styles & Liquid Glass UI */
   * {
-    box-sizing: border-box;
+    margin: 0; padding: 0; box-sizing: border-box; user-select: none;
   }
-  body, html {
-    margin:0; padding:0;
-    width:100%; height:100%;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  html, body {
+    width: 100%; height: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: url('a.jpg') no-repeat center center fixed;
     background-size: cover;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    color: #eee;
     overflow: hidden;
-    user-select: none;
   }
-
-  /* Liquid Glass base style */
   .liquid-glass {
-    background: rgba(255 255 255 / 0.1);
-    backdrop-filter: blur(18px) saturate(150%);
-    -webkit-backdrop-filter: blur(18px) saturate(150%);
-    border-radius: 20px;
-    box-shadow:
-      inset 0 0 0 1px rgba(255 255 255 / 0.25),
-      0 8px 32px rgba(0 0 0 / 0.2);
-    border: 1px solid rgba(255 255 255 / 0.3);
-    color: #e8e8f0;
-    user-select: none;
-  }
-
-  /* Dock container */
-  #dock {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 22px;
-    padding: 12px 22px;
-    width: fit-content;
-    z-index: 10;
-  }
-
-  /* Dock background using liquid glass */
-  #dock-bg {
-    position: absolute;
-    inset: 0;
-    border-radius: 24px;
-    pointer-events: none;
-    z-index: -1;
-    box-shadow:
-      0 0 20px 2px rgba(255 255 255 / 0.1),
-      0 8px 32px rgba(0 0 0 / 0.15);
-  }
-
-  /* Dock icons */
-  .dock-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
-    cursor: pointer;
-    background-size: cover;
-    background-position: center;
-    transition:
-      transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 0.3s ease;
-    box-shadow:
-      0 4px 8px rgba(0 0 0 / 0.1),
-      inset 0 0 0 1px rgba(255 255 255 / 0.15);
-  }
-  .dock-icon:hover {
-    transform: scale(1.3);
-    box-shadow:
-      0 10px 15px rgba(255 255 255 / 0.7),
-      inset 0 0 8px 2px rgba(255 255 255 / 0.4);
-    filter: drop-shadow(0 0 4px rgba(255 255 255 / 0.7));
-  }
-
-  /* Desktop */
-  #desktop {
-    width: 100%;
-    height: 100%;
-    position: relative;
-  }
-
-  /* Floating window */
-  .window {
-    position: absolute;
-    top: 60px;
-    left: 60px;
-    width: 400px;
-    height: 280px;
-    padding: 20px;
-    background: rgba(255 255 255 / 0.12);
-    border-radius: 26px;
-    box-shadow:
-      0 12px 30px rgba(0 0 0 / 0.25),
-      inset 0 0 0 1px rgba(255 255 255 / 0.25);
+    background: rgba(255 255 255 / 0.08);
     backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    color: #eaeaff;
-    user-select: text;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    border: 1px solid rgba(255 255 255 / 0.2);
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(0 0 0 / 0.25);
   }
-
-  /* Window header */
-  .window-header {
-    font-weight: 600;
-    font-size: 1.3rem;
-    margin-bottom: 12px;
-    text-shadow: 0 0 5px rgba(255 255 255 / 0.6);
+  /* Boot screen */
+  #boot {
+    position: fixed; inset: 0; background: #000; color: #00ff90;
+    font-family: monospace; font-size: 18px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    z-index: 9999;
   }
-
-  /* Buttons */
-  button {
-    background: rgba(255 255 255 / 0.1);
-    border: 1.4px solid rgba(255 255 255 / 0.25);
-    border-radius: 12px;
-    color: #d0d0e0;
-    font-weight: 600;
-    padding: 8px 18px;
-    cursor: pointer;
-    transition:
-      background 0.25s ease,
-      box-shadow 0.25s ease;
-  }
-  button:hover {
-    background: rgba(255 255 255 / 0.25);
-    box-shadow: 0 0 10px rgba(255 255 255 / 0.6);
-  }
-
-  /* Input */
-  input[type="password"] {
-    background: rgba(255 255 255 / 0.1);
-    border: 1px solid rgba(255 255 255 / 0.3);
-    border-radius: 10px;
-    color: #f0f0ff;
-    padding: 10px 14px;
-    font-size: 1rem;
-    outline: none;
-    transition: border-color 0.2s ease;
-    width: 100%;
-  }
-  input[type="password"]:focus {
-    border-color: #66f;
-    box-shadow: 0 0 8px #66f;
+  #boot pre {
+    white-space: pre-wrap;
   }
 </style>
 </head>
 <body>
-
-<div id="desktop">
-
+<div id="boot">
+  <pre id="bootLog"></pre>
+</div>
+<div id="desktop" style="display:none;">
   <!-- Dock -->
-  <div id="dock" class="liquid-glass">
-    <div id="dock-bg"></div>
+  <div id="dock" class="liquid-glass" style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; gap: 16px; padding: 10px 24px; border-radius: 30px; z-index: 10; user-select:none;">
+    <div class="dock-bg" style="position:absolute; inset:0; background: rgba(255 255 255 / 0.12); backdrop-filter: blur(15px); border-radius: 30px; border: 1px solid rgba(255 255 255 / 0.2); z-index: -1;"></div>
+    <div id="dockApps" style="display:flex; gap: 12px;"></div>
   </div>
 
-  <!-- Windows container -->
-  <div id="windows-container"></div>
-
-  <!-- RAM usage bar -->
-  <div id="ramInfo" style="
-    position: fixed; top: 15px; right: 20px; 
-    width: 220px; height: 24px; 
-    border-radius: 14px; 
-    overflow: hidden;
-    font-weight: 700;
-    color: #eee;
-    background: rgba(255 255 255 / 0.12);
-    box-shadow: inset 0 0 10px rgba(0 0 0 / 0.4);
-    user-select:none;
-    z-index: 20;
-  ">
-    RAM: <span id="ramUsed">0</span> / 50 MB
-    <div id="ramBar" style="
-      position: absolute;
-      bottom: 0; left: 0; top: 0;
-      background: #66f;
-      transition: width 0.5s ease;
-      width: 0%;
-      border-radius: 14px 0 0 14px;
-      z-index: -1;
-    "></div>
+  <!-- App Launcher -->
+  <div id="appLauncher" class="liquid-glass window" style="position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); width: 480px; max-height: 500px; padding: 16px; overflow-y: auto; display: none; flex-direction: column;">
+    <header style="font-size: 20px; font-weight: 600; margin-bottom: 10px;">App Launcher</header>
+    <input type="search" id="appSearch" placeholder="Search apps..." autocomplete="off" style="padding: 8px 12px; border-radius: 14px; border: none; outline: none; margin-bottom: 12px;" />
+    <div id="appList" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
   </div>
-</div>
 
-<!-- Boot log -->
-<div id="bootLog">
-  <div>>> SYSTEM log : Booting</div>
-  <div>>> SYSTEM IS BOOTING TO BARAD OS.DF</div>
-</div>
+  <!-- App Store -->
+  <div id="appStore" class="liquid-glass window" style="position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); width: 480px; max-height: 500px; padding: 16px; overflow-y: auto; display: none; flex-direction: column;">
+    <header style="font-size: 20px; font-weight: 600; margin-bottom: 10px;">App Store</header>
+    <input type="search" id="storeSearch" placeholder="Search apps..." autocomplete="off" style="padding: 8px 12px; border-radius: 14px; border: none; outline: none; margin-bottom: 12px;" />
+    <div id="appStoreList" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+  </div>
 
-<script>
-(() => {
-  const TOTAL_RAM_MB = 50;
-  let allocatedRAM = 0;
-  let isCrashed = false;
+  <!-- Welcome Screen -->
+  <div id="welcomeScreen" class="liquid-glass window" style="position: fixed; inset: 20px 25%; width: 50%; height: 60%; padding: 24px; display: none; flex-direction: column; overflow-y: auto; text-align: center;">
+    <h2 style="margin-bottom: 16px;">Welcome to Barad OS</h2>
+    <p style="margin-bottom: 20px;">Select apps to install and get started!</p>
+    <div id="welcomeApps" style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;"></div>
+    <button id="welcomeInstallBtn" style="margin-top: 24px; padding: 12px 20px; font-size: 16px; border: none; border-radius: 14px; background: #00ff90; color: #000; cursor: pointer;">Install Selected Apps</button>
+  </div>
+  <!-- Windows Container (all app windows go here) -->
+  <div id="windowsContainer" style="position: absolute; inset: 0; pointer-events: none;"></div>
 
-  // App definitions with icons (base64 or local paths)
-  const apps = [
-    { id: 'fileManager', name: 'File Manager', icon: 'https://cdn-icons-png.flaticon.com/512/716/716784.png' },
-    { id: 'terminal', name: 'Terminal', icon: 'https://cdn-icons-png.flaticon.com/512/2991/2991148.png' },
-    { id: 'settings', name: 'Settings', icon: 'https://cdn-icons-png.flaticon.com/512/3524/3524659.png' },
-    { id: 'youtube', name: 'YouTube', icon: 'https://cdn-icons-png.flaticon.com/512/1384/1384060.png' },
-    // add more app icons here
-  ];
+  <!-- Terminal -->
+  <div id="terminal" class="liquid-glass window" style="position: fixed; bottom: 100px; right: 40px; width: 480px; max-height: 350px; padding: 16px; display: none; flex-direction: column; font-family: monospace; font-size: 14px; overflow-y: auto; color: #0f0; background: rgba(0,0,0,0.9); border-radius: 14px; box-shadow: 0 0 16px #0f0;">
+    <header style="font-weight: 600; margin-bottom: 10px;">Terminal</header>
+    <pre id="terminalOutput" style="flex-grow: 1; overflow-y: auto; white-space: pre-wrap;"></pre>
+    <input type="text" id="terminalInput" autocomplete="off" style="border: none; outline: none; background: transparent; color: #0f0; font-family: monospace; font-size: 14px;" placeholder="Type command..." />
+  </div>
 
-  // DOM references
-  const dock = document.getElementById('dock');
-  const windowsContainer = document.getElementById('windows-container');
-  const bootLog = document.getElementById('bootLog');
-  const desktop = document.getElementById('desktop');
-  const ramUsedSpan = document.getElementById('ramUsed');
-  const ramBar = document.getElementById('ramBar');
+  <!-- File Manager -->
+  <div id="fileManager" class="liquid-glass window" style="position: fixed; top: 50px; left: 40px; width: 480px; max-height: 500px; padding: 16px; display: none; flex-direction: column; overflow-y: auto; color: #eee;">
+    <header style="font-weight: 600; margin-bottom: 10px;">File Manager</header>
+    <input type="search" id="fileSearch" placeholder="Search files..." autocomplete="off" style="padding: 8px 12px; border-radius: 14px; border: none; outline: none; margin-bottom: 12px;" />
+    <div id="fileList" style="display: flex; flex-direction: column; gap: 6px;"></div>
+  </div>
 
-  // Helper to create dock icons
-  function createDockIcon(app) {
-    const div = document.createElement('div');
-    div.classList.add('dock-icon');
-    div.style.backgroundImage = `url(${app.icon})`;
-    div.title = app.name;
-    div.onclick = () => launchApp(app);
-    return div;
-  }
+  <!-- HTML Emulator -->
+  <div id="htmlEmulator" class="liquid-glass window" style="position: fixed; top: 40px; right: 40px; width: 600px; height: 400px; padding: 16px; display: none; flex-direction: column; overflow: hidden; color: #eee;">
+    <header style="font-weight: 600; margin-bottom: 10px;">HTML Emulator</header>
+    <textarea id="htmlEditor" style="flex-grow: 1; background: rgba(0,0,0,0.6); color: #0f0; border: none; border-radius: 10px; padding: 12px; font-family: monospace; resize: none;"></textarea>
+    <button id="htmlSaveBtn" style="margin-top: 10px; padding: 10px 16px; border-radius: 14px; border: none; background: #00ff90; color: #000; cursor: pointer;">Save & Run</button>
+    <iframe id="htmlPreview" style="margin-top: 12px; height: 150px; width: 100%; border-radius: 14px; border: none; background: #111;"></iframe>
+  </div>
+</div> <!-- end desktop -->
+  <!-- Reset System Button -->
+  <button id="resetBtn" title="Reset System" style="position: fixed; top: 20px; right: 20px; padding: 10px 16px; border-radius: 14px; border: none; background: #ff4444; color: #fff; cursor: pointer; z-index: 10000;">Reset</button>
 
-  // Update RAM usage UI
-  function updateRAM() {
-    ramUsedSpan.textContent = allocatedRAM.toFixed(1);
-    let percent = (allocatedRAM / TOTAL_RAM_MB) * 100;
-    ramBar.style.width = percent + '%';
-    if (percent > 85) {
-      ramBar.style.background = '#f33';
-    } else if (percent > 60) {
-      ramBar.style.background = '#fa3';
-    } else {
-      ramBar.style.background = '#66f';
-    }
-  }
+  <!-- Clock Widget -->
+  <div id="clockWidget" class="liquid-glass" style="position: fixed; top: 20px; left: 20px; padding: 12px 20px; font-size: 18px; font-weight: 600; border-radius: 14px; user-select: none; cursor: default; z-index: 10000;">
+    00:00:00
+  </div>
 
-  // Launch app with RAM usage, crash if needed
-  function launchApp(app) {
-    if (isCrashed) {
-      alert("System is crashed. Please revive first.");
-      return;
-    }
-    const ramUsage = 20 + Math.random() * 4; // ~1/2.1 RAM
-    allocatedRAM += ramUsage;
-    updateRAM();
+  <!-- Glitch Effect Toggle -->
+  <label for="glitchToggle" style="position: fixed; bottom: 80px; right: 20px; color: #eee; user-select:none; cursor:pointer; z-index: 10000;">
+    <input type="checkbox" id="glitchToggle" style="margin-right: 8px;" /> Enable Screen Glitch (every 2000h)
+  </label>
 
-    if (allocatedRAM >= TOTAL_RAM_MB) {
-      triggerSystemCrash();
-      return;
-    }
+  <!-- Crash Screen -->
+  <div id="crashScreen" style="display:none; position: fixed; inset: 0; background: #000; color: #f00; font-family: monospace; font-size: 20px; display:flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999; user-select:none;">
+    <p>))SYSTEM CRASHED</p>
+    <p>50MB OF ALLOCATED RAM GOT FULL</p>
+    <p>THE SYSTEM HAS CRASHED.</p>
+    <p>PLEASE PRESS THE BUTTON BELOW TO BROADCAST GUI PASSWORD MANAGER</p>
+    <button id="crashReviveBtn" style="padding: 12px 20px; font-size: 16px; border-radius: 14px; border: none; background: #00ff90; color: #000; cursor: pointer; margin-top: 24px;">Open Password Manager</button>
+  </div>
 
-    // Open window for the app
-    openWindow(app);
-  }
-
-  // Open a floating window
-  function openWindow(app) {
-    const win = document.createElement('div');
-    win.className = 'window liquid-glass';
-    win.style.top = `${60 + Math.random() * 100}px`;
-    win.style.left = `${60 + Math.random() * 200}px`;
-
-    const header = document.createElement('div');
-    header.className = 'window-header';
-    header.textContent = app.name;
-
-    const content = document.createElement('div');
-    content.style.flex = '1';
-    content.style.overflow = 'auto';
-    content.style.fontSize = '0.95rem';
-    content.style.paddingRight = '8px';
-    content.textContent = `Welcome to ${app.name}! This app uses approximately  ${(20 + Math.random()*4).toFixed(1)} MB of RAM.`;
-
-    const closeBtn = document.createElement('button');
-    closeBtn.textContent = 'Close';
-    closeBtn.onclick = () => {
-      allocatedRAM -= ramUsageForWindow;
-      updateRAM();
-      win.remove();
-    };
-
-    win.appendChild(header);
-    win.appendChild(content);
-    win.appendChild(closeBtn);
-    windowsContainer.appendChild(win);
-
-    // Track RAM used by this window (simulate)
-    const ramUsageForWindow = 20 + Math.random()*4;
-  }
-
-  // Crash screen
-  function triggerSystemCrash() {
-    isCrashed = true;
-    desktop.style.display = 'none';
-    bootLog.style.display = 'none';
-
-    document.body.innerHTML = `
-      <div style="background:black; color:#f33; font-family: monospace; height:100vh; display:flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px;">
-        <h1>))SYSTEM CRASHED</h1>
-        <p>50MB OF ALLOCATED RAM GOT FULL</p>
-        <p>THE SYSTEM HAS CRASHED.</p>
-        <button id="reviveBtn" style="padding: 15px 30px; font-size: 18px; cursor: pointer; margin-top: 30px;">BROADCAST GUI PASSWORD MANAGER</button>
-        <div id="passwordSection" style="margin-top: 25px; display:none;">
-          <input type="password" id="revivePassword" placeholder="Enter password" style="padding: 12px 16px; font-size: 16px; border-radius: 8px; border: none; outline: none; width: 260px;"/>
-          <button id="submitPassword" style="padding: 12px 16px; font-size: 16px; cursor: pointer; margin-left: 12px;">Submit</button>
-          <p id="passwordMsg" style="color:#f55; margin-top: 15px;"></p>
-        </div>
-      </div>
-    `;
-
-    document.getElementById('reviveBtn').onclick = () => {
-      document.getElementById('passwordSection').style.display = 'block';
-      document.getElementById('reviveBtn').style.display = 'none';
-    };
-
-    document.getElementById('submitPassword').onclick = () => {
-      const pw = document.getElementById('revivePassword').value;
-      const correctPW = 'revive123'; // Change as you want
-
-      if (pw === correctPW) {
-        openTerminalWindow();
-      } else {
-        document.getElementById('passwordMsg').textContent = 'Incorrect password, try again.';
-      }
-    };
-  }
-
-  // Terminal window on revive
-  function openTerminalWindow() {
-    document.body.innerHTML = `
-      <div style="background:#000; color:#0f0; font-family: monospace; padding: 20px; height: 200px; width: 450px; margin: 50px auto; border-radius: 10px; box-shadow: 0 0 20px #0f0;">
-        <p>SYSTEM CRASHED.</p>
-        <p>YOU REVIVED YOUR OS.</p>
-        <button id="reviveConfirm" style="margin-top: 20px; padding: 12px 28px; font-size: 18px; cursor: pointer;">Restart System</button>
-      </div>
-    `;
-
-    document.getElementById('reviveConfirm').onclick = () => {
-      allocatedRAM = 0;
-      isCrashed = false;
-      location.reload();
-    };
-  }
-
-  // Boot sequence
-  setTimeout(() => {
-    bootLog.style.animationPlayState = 'running';
-    setTimeout(() => {
-      bootLog.style.display = 'none';
-      desktop.style.display = 'block';
-      apps.forEach(app => {
-        dock.appendChild(createDockIcon(app));
-      });
-      updateRAM();
-    }, 1200);
-  }, 2200);
-})();
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
