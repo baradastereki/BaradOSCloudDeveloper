@@ -1,0 +1,322 @@
+/* === BASE & RESET === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url('a.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #eee;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === LIQUID GLASS STYLE === */
+.liquid-glass {
+  background: rgba(255 255 255 / 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255 255 255 / 0.2);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0 0 0 / 0.25);
+}
+
+/* === DOCK === */
+#dock {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+  padding: 10px 24px;
+  border-radius: 30px;
+  user-select: none;
+  z-index: 10;
+}
+.dock-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(255 255 255 / 0.12);
+  backdrop-filter: blur(15px);
+  border-radius: 30px;
+  border: 1px solid rgba(255 255 255 / 0.2);
+  z-index: -1;
+}
+.dock-icon {
+  width: 56px;
+  height: 56px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.dock-icon:hover {
+  transform: scale(1.1);
+}
+
+/* === WINDOW === */
+.window {
+  color: #eee;
+  user-select: text;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  resize: both;
+  min-width: 280px;
+  min-height: 200px;
+  max-width: 90vw;
+  max-height: 80vh;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0 0 0 / 0.25);
+  border: 1px solid rgba(255 255 255 / 0.2);
+  background: rgba(255 255 255 / 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  padding: 16px;
+  overflow-y: auto;
+  position: fixed;
+  z-index: 100;
+}
+
+/* === BUTTONS === */
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 14px;
+  padding: 10px 16px;
+  background: #00ff90;
+  color: #000;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+button:hover {
+  background: #00cc6a;
+}
+button:active {
+  background: #009944;
+}
+/* === APP LAUNCHER & APP STORE === */
+#appLauncher header,
+#appStore header,
+#welcomeScreen h2,
+#terminal header,
+#fileManager header,
+#htmlEmulator header {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+#appSearch,
+#storeSearch,
+#fileSearch,
+#terminalInput,
+#htmlEditor {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 14px;
+  border: none;
+  outline: none;
+  margin-bottom: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  color: #eee;
+  font-size: 16px;
+  font-weight: 500;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  user-select: text;
+}
+
+#appList,
+#appStoreList,
+#welcomeApps,
+#fileList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.app-item,
+.store-item,
+.welcome-app-item,
+.file-item {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  transition: transform 0.15s ease;
+}
+
+.app-item:hover,
+.store-item:hover,
+.welcome-app-item:hover,
+.file-item:hover {
+  transform: scale(1.15);
+}
+
+/* Context Menu */
+.context-menu {
+  position: fixed;
+  background: rgba(30, 30, 30, 0.95);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.8);
+  color: #eee;
+  padding: 8px 0;
+  z-index: 20000;
+  user-select: none;
+  min-width: 140px;
+  font-size: 14px;
+}
+
+.context-menu-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.context-menu-item:hover {
+  background: #00ff90;
+  color: #000;
+}
+
+/* === TERMINAL === */
+#terminal {
+  font-family: monospace;
+  font-size: 14px;
+  background: rgba(0,0,0,0.9);
+  color: #0f0;
+  border-radius: 14px;
+  box-shadow: 0 0 16px #0f0;
+}
+
+#terminalOutput {
+  flex-grow: 1;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  margin-bottom: 8px;
+}
+
+#terminalInput {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #0f0;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 144, 0.5);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 144, 0.8);
+}
+/* === CLOCK WIDGET === */
+#clockWidget {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  padding: 12px 20px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 14px;
+  user-select: none;
+  cursor: default;
+  z-index: 10000;
+  background: rgba(255 255 255 / 0.12);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255 255 255 / 0.2);
+  box-shadow: 0 8px 32px rgba(0 0 0 / 0.25);
+}
+
+/* === RESET BUTTON === */
+#resetBtn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  border: none;
+  background: #ff4444;
+  color: #fff;
+  cursor: pointer;
+  z-index: 10000;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+#resetBtn:hover {
+  background: #cc3333;
+}
+
+/* === GLITCH TOGGLE LABEL === */
+label[for="glitchToggle"] {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  color: #eee;
+  user-select: none;
+  cursor: pointer;
+  z-index: 10000;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* === CRASH SCREEN === */
+#crashScreen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  inset: 0;
+  background: #000;
+  color: #f00;
+  font-family: monospace;
+  font-size: 20px;
+  user-select: none;
+  z-index: 99999;
+}
+
+#crashScreen p {
+  margin: 6px 0;
+}
+
+#crashReviveBtn {
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 14px;
+  border: none;
+  background: #00ff90;
+  color: #000;
+  cursor: pointer;
+  margin-top: 24px;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+#crashReviveBtn:hover {
+  background: #00cc6a;
+}
