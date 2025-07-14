@@ -354,6 +354,7 @@ function loadSettings() {
   GLITCH_TOGGLE.addEventListener("change", () => {
     settings.glitchEnabled = GLITCH_TOGGLE.checked;
     saveToStorage(STORAGE_KEY_SETTINGS, settings);
+    startGlitchTimer();
   });
   loadWallpaper();
   pinnedApps = loadFromStorage(STORAGE_KEY_PINNED, []);
@@ -376,6 +377,10 @@ function createWindowForApp(appId) {
   win.style.top = `${50 + windows.length * 30}px`;
   win.style.left = `${50 + windows.length * 30}px`;
   win.style.zIndex = 100 + windows.length;
+  win.style.width = "600px";
+  win.style.height = "450px";
+  win.style.display = "flex";
+  win.style.flexDirection = "column";
 
   // Title bar
   const titleBar = document.createElement("div");
@@ -405,12 +410,14 @@ function createWindowForApp(appId) {
   content.style.flex = "1";
   content.style.overflow = "auto";
   content.style.padding = "10px";
+  content.style.background = "rgba(255 255 255 / 0.06)";
+  content.style.borderRadius = "10px";
 
   if (app.iframe) {
     const iframe = document.createElement("iframe");
     iframe.src = app.iframeSrc;
     iframe.style.width = "100%";
-    iframe.style.height = "400px";
+    iframe.style.height = "100%";
     iframe.style.border = "none";
     content.appendChild(iframe);
   } else if (app.id === "htmlEmulator") {
@@ -487,52 +494,58 @@ function systemCrash() {
 // Crash screen revive button
 CRASH_REVIVE_BTN.onclick = () => {
   const password = prompt("Enter GUI Password Manager Password:");
-  if (password === "revivepassword") { // example password
+  if (password === "revivepassword") {  // Change this to whatever password you want
     CRASH_SCREEN.style.display = "none";
     DESKTOP.style.display = "block";
     startBoot();
+
+    // Open a small terminal window that says "SYSTEM CRASHED. YOU REVIVED YOUR OS"
+    createTerminalWindow("SYSTEM CRASHED.\nYOU REVIVED YOUR OS.");
+
+    // Reset RAM usage so OS can run normally after crash
+    ramUsed = 0;
+    ramAllocations = {};
+    saveToStorage(STORAGE_KEY_RAM, ramAllocations);
+
   } else {
     alert("Wrong password!");
   }
 };
 
-// HTML Emulator setup
-function setupHTMLEmulator(container) {
-  const editor = document.createElement
-  function setupHTMLEmulator(container) {
-  // Clear container just in case
-  container.innerHTML = "";
+// Helper function to open terminal window with message
+function createTerminalWindow(initialMessage = "") {
+  const win = document.createElement("div");
+  win.className = "window liquid-glass";
+  win.style.width = "400px";
+  win.style.height = "200px";
+  win.style.top = "100px";
+  win.style.left = "100px";
+  win.style.zIndex = 9999;
 
-  const editor = document.createElement("textarea");
-  editor.style.width = "100%";
-  editor.style.height = "300px";
-  editor.placeholder = "<!-- Write your HTML here -->";
-  container.appendChild(editor);
+  const titleBar = document.createElement("div");
+  titleBar.textContent = "Terminal - Crash Manager";
+  titleBar.style.background = "rgba(255 255 255 / 0.12)";
+  titleBar.style.padding = "5px 10px";
+  titleBar.style.cursor = "move";
+  titleBar.style.userSelect = "none";
 
-  const saveBtn = document.createElement("button");
-  saveBtn.textContent = "Save & Preview";
-  saveBtn.style.marginTop = "10px";
-  container.appendChild(saveBtn);
-
-  const preview = document.createElement("iframe");
-  preview.style.width = "100%";
-  preview.style.height = "300px";
-  preview.style.border = "1px solid rgba(255,255,255,0.2)";
-  preview.style.marginTop = "10px";
-  container.appendChild(preview);
-
-  // Load last saved HTML if available
-  const lastHtml = loadFromStorage("barados_temp_html") || "";
-  editor.value = lastHtml;
-  preview.srcdoc = lastHtml;
-
-  saveBtn.onclick = () => {
-    const htmlContent = editor.value;
-    preview.srcdoc = htmlContent;
-    // Save temp html content to localStorage
-    saveToStorage("barados_temp_html", htmlContent);
-    // Also save it to the file system as temp.html
-    saveFile("temp.html", htmlContent);
-    alert("HTML saved!");
+  const closeBtn = document.createElement("button");
+  closeBtn.textContent = "×";
+  closeBtn.style.float = "right";
+  closeBtn.onclick = () => {
+    document.body.removeChild(win);
   };
-  }
+  titleBar.appendChild(closeBtn);
+  win.appendChild(titleBar);
+
+  const output = document.createElement("pre");
+  output.style.whiteSpace = "pre-wrap";
+  output.style.margin = "10px";
+  output.style.height = "140px";
+  output.style.overflowY = "auto";
+  output.textContent = initialMessage;
+  win.appendChild(output);
+
+  document.body.appendChild(win);
+  makeDraggable(win, titleBar);
+}
